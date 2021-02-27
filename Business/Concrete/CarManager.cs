@@ -4,6 +4,7 @@ using System.Text;
 using Business.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 
 namespace Business.Concrete
 {
@@ -18,16 +19,21 @@ namespace Business.Concrete
 
         public bool Add(Car car)
         {
-            if (car.Description.Length>2 && car.DailyPrice>0)
+            if (car.CarName.Length>2 && car.DailyPrice>0)
             {
                 _carDal.Add(car);
                 return true;
             }
             else
             {
-                Console.WriteLine("Hatalı isim ya da tutar girdiniz");
+                Console.WriteLine("Araba adı 2 harften az olamaz/Günlük ücreti 0 TL ve daha az olamaz.");
                 return false;
             }
+        }
+
+        public void Delete(Car car)
+        {
+            _carDal.Delete(car);
         }
 
         public List<Car> GetAll()
@@ -35,14 +41,26 @@ namespace Business.Concrete
             return _carDal.GetAll();
         }
 
-        public List<Car> GetCarsByBrandId(int id)
+        public List<CarDetailDto> GetCarDetails()
         {
-            return _carDal.GetAll(b => b.BrandId == id);
+            return _carDal.GetCarDetails();
         }
 
-        public List<Car> GetCarsByColorId(int id)
+        public Car GetCarsByBrandId(int brandId)
         {
-            return _carDal.GetAll(c => c.ColorId == id);
+            return _carDal.Get(b => b.BrandId == brandId);
         }
+
+        public Car GetCarsByColorId(int colorId)
+        {
+            return _carDal.Get(c => c.ColorId == colorId);
+        }
+
+        public void Update(Car car)
+        {
+            _carDal.Update(car);
+        }
+
+       
     }
 }
